@@ -12,7 +12,7 @@ const port = process.env.PORT || 8585
 app.use(parser.urlencoded({ extended: true }))
 app.use(parser.json())
 
-app.get('/', (_, res) => {
+app.get('/privacy-policy', (_, res) => {
     res.sendFile(path.join(__dirname, '/privacy-policy.html'))
 })
 
