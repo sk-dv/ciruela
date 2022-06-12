@@ -1,12 +1,16 @@
-import * as queryString from 'query-string'
+import passport from 'passport'
+import { Strategy } from 'passport-facebook'
 
-const stringifiedParams = queryString.stringify({
-    client_id: process.env.APP_ID_GOES_HERE,
-    redirect_uri: 'https://www.example.com/authenticate/facebook/',
-    scope: ['email', 'user_friends'].join(','), 
-    response_type: 'code',
-    auth_type: 'rerequest',
-    display: 'popup',
-})
+const options = {
+    clientID: process.env.APP_ID,
+    clientSecret: process.env.APP_SECRET,
+    callbackURL: "http://localhost:8585/auth/callback"
+}
 
-const facebookLoginUrl = `https://www.facebook.com/v4.0/dialog/oauth?${stringifiedParams}`
+const verify = (accessToken, refreshToken, profile, cb) => {
+    User.findOrCreate({ facebookId: profile.id }, (err, user) => {
+        return cb(err, user);
+    });
+}
+
+passport.use(new Strategy(options, verify));
